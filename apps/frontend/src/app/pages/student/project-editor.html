@@ -1,0 +1,143 @@
+<a routerLink="/student/practice" class="text-sm font-black text-blue-700 hover:underline">
+  &larr; Back to practice
+</a>
+
+@if (error()) {
+  <p class="mt-4 rounded-xl border-2 border-black bg-red-100 px-4 py-3 font-bold text-red-700">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <p class="mt-10 font-bold text-gray-500">Loading project...</p>
+} @else if (project(); as p) {
+  <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+    <div>
+      <h1 class="text-3xl font-black text-gray-900">{{ p.title }}</h1>
+      @if (p.description) {
+        <p class="mt-1 font-semibold text-gray-600">{{ p.description }}</p>
+      }
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="rounded-full border-2 border-black bg-yellow-400 px-3 py-1 text-xs font-black uppercase text-gray-900">
+        {{ p.language }}
+      </span>
+      <select [ngModel]="p.visibility" (ngModelChange)="setVisibility($event)"
+        class="rounded-xl border-2 border-black px-3 py-2 text-sm font-bold">
+        <option value="private">Private</option>
+        <option value="shared_with_teacher">Shared with teacher</option>
+        <option value="public">Public</option>
+      </select>
+    </div>
+  </div>
+
+  @if (p.visibility === 'public') {
+    <p class="mt-2 text-xs font-bold text-gray-500">
+      Public link: anyone with this project's URL can view the latest version.
+    </p>
+  }
+
+  @if (p.challengeId) {
+    <div class="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border-2 border-black bg-blue-50 p-4">
+      <span class="font-black text-blue-900">Guided challenge</span>
+      <button type="button" class="uno-btn-action" (click)="getHint()" [disabled]="hintExhausted()">
+        {{ hintExhausted() ? 'No more hints' : 'Get a hint' }}
+      </button>
+      <button type="button" class="uno-btn-success" (click)="markComplete()" [disabled]="completing()">
+        {{ completing() ? 'Saving...' : 'Mark complete' }}
+      </button>
+      @if (hint(); as h) {
+        <p class="w-full font-semibold text-blue-900">{{ h }}</p>
+      }
+    </div>
+  }
+
+  <div class="mt-6 grid gap-6 lg:grid-cols-3">
+    <div class="lg:col-span-2">
+      <div class="overflow-hidden rounded-xl border-2 border-black bg-gray-900 shadow-md">
+        <div class="flex items-center justify-between border-b-2 border-black bg-gray-800 px-4 py-2">
+          <span class="text-xs font-black uppercase tracking-wide text-yellow-400">{{ p.language }}</span>
+          <button type="button" (click)="run()" [disabled]="running()"
+            class="rounded-lg border-2 border-black bg-green-600 px-4 py-1 text-xs font-black uppercase text-white transition hover:-translate-y-0.5 disabled:opacity-50">
+            {{ running() ? 'Running...' : 'Run' }}
+          </button>
+        </div>
+        <textarea class="block w-full resize-y bg-gray-900 px-4 py-3 font-mono text-sm leading-relaxed text-gray-100 outline-none"
+          rows="18" spellcheck="false" [ngModel]="source()" (ngModelChange)="source.set($event)"></textarea>
+      </div>
+
+      @if (runResult(); as r) {
+        <div class="mt-3 overflow-hidden rounded-xl border-2 border-black bg-gray-950 shadow-md">
+          <div class="border-b-2 border-black bg-gray-800 px-4 py-2 text-xs font-black uppercase tracking-wide"
+            [class.text-green-400]="r.exitCode === 0 && !r.timedOut"
+            [class.text-red-400]="r.exitCode !== 0 || r.timedOut">
+            {{ r.timedOut ? 'Timed out' : 'Exit code ' + r.exitCode }}
+          </div>
+          <pre class="max-h-64 overflow-auto px-4 py-3 font-mono text-sm text-gray-100">{{ r.stdout }}@if (r.stderr) {
+<span class="text-red-400">{{ r.stderr }}</span>}</pre>
+        </div>
+      }
+
+      <div class="mt-4 flex flex-wrap items-end gap-3">
+        <div class="flex-1">
+          <label for="version-msg" class="text-sm font-bold text-gray-700">Snapshot message</label>
+          <input id="version-msg" name="versionMessage" type="text" [(ngModel)]="versionMessage"
+            class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold"
+            placeholder="v2 — collision detection working" />
+        </div>
+        <button type="button" class="uno-btn-primary" (click)="saveVersion()" [disabled]="saving()">
+          {{ saving() ? 'Saving...' : 'Save Version' }}
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="font-black text-gray-900">Version history</h2>
+      @if (!versions().length) {
+        <p class="mt-2 text-sm font-bold text-gray-500">No versions yet — save your first snapshot.</p>
+      }
+      <div class="mt-2 space-y-2">
+        @for (version of versions(); track version.id) {
+          <div class="rounded-xl border-2 border-black bg-white p-3">
+            <div class="flex items-center justify-between gap-2">
+              <button type="button" (click)="viewVersion(version)" class="font-black text-gray-900 hover:underline">
+                v{{ version.versionNumber }}
+              </button>
+              <span class="text-xs font-semibold text-gray-500">{{ version.createdAt.slice(0, 10) }}</span>
+            </div>
+            @if (version.message) {
+              <p class="mt-1 text-sm font-semibold text-gray-600">{{ version.message }}</p>
+            }
+            @if (version.teacherFeedback) {
+              <p class="mt-2 rounded-lg border-2 border-black bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-900">
+                Teacher: {{ version.teacherFeedback }}
+              </p>
+            }
+            <div class="mt-2 flex gap-3 text-xs font-black">
+              <button type="button" class="text-blue-700 hover:underline" (click)="loadVersionIntoEditor(version)">
+                Load into editor
+              </button>
+              @if (version.id !== latestVersion().id) {
+                <button type="button" class="text-green-700 hover:underline" (click)="restore(version)">
+                  Restore
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (selectedVersion(); as sel) {
+    <div class="mt-6 overflow-hidden rounded-xl border-2 border-black bg-white shadow-md">
+      <div class="border-b-2 border-black bg-gray-100 px-4 py-2 text-sm font-black">
+        Diff: v{{ sel.versionNumber }} &rarr; current editor
+        <span class="ml-2 font-semibold text-gray-500">(red = only in v{{ sel.versionNumber }}, green = only in editor)</span>
+      </div>
+      <pre class="max-h-96 overflow-auto font-mono text-sm leading-relaxed">@for (line of diff() ?? []; track $index) {<div class="px-4"
+        [class.bg-green-100]="line.type === 'added'"
+        [class.bg-red-100]="line.type === 'removed'"
+        [class.text-green-900]="line.type === 'added'"
+        [class.text-red-900]="line.type === 'removed'">{{ line.type === 'added' ? '+ ' : line.type === 'removed' ? '- ' : '  ' }}{{ line.text }}</div>}</pre>
+    </div>
+  }
+}

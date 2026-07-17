@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.down = exports.up = void 0;
+const models_1 = require("../models");
+const up = async ({ context: sequelize }) => {
+    const queryInterface = sequelize.getQueryInterface();
+    await queryInterface.createTable(models_1.TeacherSubscription.getTableName(), models_1.TeacherSubscription.getAttributes());
+};
+exports.up = up;
+const down = async ({ context: sequelize }) => {
+    const queryInterface = sequelize.getQueryInterface();
+    await queryInterface.dropTable(models_1.TeacherSubscription.getTableName());
+};
+exports.down = down;
+//# sourceMappingURL=0004-add-teacher-subscriptions.js.map

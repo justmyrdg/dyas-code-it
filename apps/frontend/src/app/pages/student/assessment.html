@@ -1,0 +1,111 @@
+<a [routerLink]="['/student/classes', classId()]" class="text-sm font-black text-blue-700 hover:underline">
+  &larr; Back to class
+</a>
+
+@if (error()) {
+  <p class="mt-4 rounded-xl border-2 border-black bg-red-100 px-4 py-3 font-bold text-red-700">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <p class="mt-10 font-bold text-gray-500">Loading assessment...</p>
+} @else if (assessment(); as a) {
+  <h1 class="mt-4 text-3xl font-black text-gray-900">{{ a.title }}</h1>
+  <p class="mt-1 font-semibold text-gray-600">Passing score: {{ a.passingScore }}%</p>
+
+  @if (latest(); as sub) {
+    <div class="mt-4 rounded-2xl border-2 border-black p-4 font-bold"
+      [class.bg-green-100]="sub.status === 'passed'" [class.text-green-800]="sub.status === 'passed'"
+      [class.bg-red-100]="sub.status === 'failed'" [class.text-red-800]="sub.status === 'failed'"
+      [class.bg-yellow-100]="sub.status === 'pending'" [class.text-yellow-800]="sub.status === 'pending'">
+      @switch (sub.status) {
+        @case ('pending') { Submitted — awaiting teacher review. Auto-graded so far: {{ sub.autoScore }}/{{ sub.maxScore }}. }
+        @case ('passed') { Passed with {{ sub.totalScore }}/{{ sub.maxScore }}. }
+        @case ('failed') { Scored {{ sub.totalScore }}/{{ sub.maxScore }} — not yet passing. }
+        @default { Scored {{ sub.totalScore }}/{{ sub.maxScore }}. }
+      }
+      <span class="ml-1 font-semibold">(Attempt {{ sub.attemptNumber }})</span>
+    </div>
+
+    @if (sub.feedback.length) {
+      <div class="mt-4 space-y-3">
+        @for (fb of sub.feedback; track $index) {
+          <div class="rounded-xl border-2 border-black bg-white p-4">
+            <div class="flex items-start justify-between gap-3">
+              <p class="whitespace-pre-line font-bold text-gray-900">
+                {{ $index + 1 }}. {{ a.questions[$index].prompt }}
+              </p>
+              <span class="shrink-0 text-xs font-black uppercase text-gray-500">{{ fb.score }}/{{ fb.maxPoints }} pts</span>
+            </div>
+            @if (fb.comment) {
+              <p class="mt-2 text-sm font-semibold text-gray-700">{{ fb.comment }}</p>
+            } @else if (!fb.autoGraded && !sub.gradedAt) {
+              <span class="mt-2 inline-block rounded-full border-2 border-black bg-yellow-400 px-3 py-1 text-xs font-black uppercase text-gray-900">
+                Awaiting manual review
+              </span>
+            }
+            @if (fb.details?.length) {
+              <ul class="mt-2 space-y-1 text-sm font-semibold">
+                @for (d of fb.details; track $index) {
+                  <li>Test {{ $index + 1 }}: {{ d.passed ? 'passed' : 'failed' }}</li>
+                }
+              </ul>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+
+  @if (alreadyPassed()) {
+    <p class="mt-6 font-bold text-green-700">You have passed this assessment. Nice work!</p>
+  } @else if (awaitingGrading()) {
+    <p class="mt-6 font-bold text-yellow-700">Your latest attempt is awaiting grading. Check back soon.</p>
+  } @else {
+    <form class="mt-6 space-y-6" (ngSubmit)="submit()">
+      @for (question of a.questions; track $index; let qi = $index) {
+        <div class="rounded-2xl border-2 border-black bg-white p-5 shadow-md">
+          <div class="flex items-start justify-between gap-3">
+            <p class="whitespace-pre-line font-bold text-gray-900">{{ $index + 1 }}. {{ question.prompt }}</p>
+            <span class="shrink-0 text-xs font-black uppercase text-gray-500">{{ question.points }} pts &middot; {{ question.type }}</span>
+          </div>
+
+          @switch (question.type) {
+            @case ('mcq') {
+              <div class="mt-3 space-y-2">
+                @for (option of optionsOf(question); track $index) {
+                  <label class="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-black px-4 py-2 font-semibold hover:bg-gray-50">
+                    <input type="radio" name="q-{{ qi }}" [value]="$index"
+                      [checked]="$any(answers()[qi])['selectedIndex'] === $index"
+                      (change)="setAnswer(qi, { selectedIndex: $index })" />
+                    {{ option }}
+                  </label>
+                }
+              </div>
+            }
+            @case ('code') {
+              <div class="mt-3 overflow-hidden rounded-xl border-2 border-black bg-gray-900 shadow-md">
+                <div class="border-b-2 border-black bg-gray-800 px-4 py-2 text-xs font-black uppercase tracking-wide text-yellow-400">
+                  {{ question.config['language'] }}
+                </div>
+                <textarea class="block w-full resize-y bg-gray-900 px-4 py-3 font-mono text-sm leading-relaxed text-gray-100 outline-none"
+                  rows="8" spellcheck="false"
+                  [value]="$any(answers()[$index]['source'])"
+                  (input)="setAnswer($index, { source: $any($event.target).value })"></textarea>
+              </div>
+            }
+            @case ('short_answer') {
+              <textarea class="mt-3 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold" rows="4"
+                placeholder="Your answer..."
+                [value]="$any(answers()[$index]['text'])"
+                (input)="setAnswer($index, { text: $any($event.target).value })"></textarea>
+            }
+          }
+        </div>
+      }
+
+      <button type="submit" class="uno-btn-primary" [disabled]="submitting()">
+        {{ submitting() ? 'Submitting...' : 'Submit Assessment' }}
+      </button>
+    </form>
+  }
+}

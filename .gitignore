@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production
+/dist
+/build
+/out
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Angular
+/apps/frontend/dist/
+/apps/frontend/.angular/
+
+# Coverage
+/coverage/
+
+# Superpowers scratch state (progress ledgers, etc.)
+/.superpowers/

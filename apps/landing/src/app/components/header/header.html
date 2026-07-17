@@ -1,0 +1,112 @@
+<header
+  class="sticky top-0 z-40 border-b-4 border-black bg-white/95 text-gray-950 shadow-lg backdrop-blur"
+>
+  <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-20">
+    <a routerLink="/preview" (click)="closeMenu()" class="flex items-center gap-2.5 md:flex-1">
+      <span class="uno-text-outline text-2xl font-black sm:text-3xl">
+        <span class="text-red-600">Dyas</span><span class="text-blue-600">Code</span
+        ><span class="text-green-600">IT</span>
+      </span>
+    </a>
+
+    <div class="hidden items-center justify-center gap-8 text-sm font-black md:flex md:flex-1">
+      <a
+        routerLink="/preview"
+        fragment="features"
+        class="border-b-2 border-transparent pb-1 transition hover:border-red-600 hover:text-red-600"
+        >Features</a
+      >
+      <a
+        routerLink="/preview"
+        fragment="workflow"
+        class="border-b-2 border-transparent pb-1 transition hover:border-blue-600 hover:text-blue-600"
+        >How It Works</a
+      >
+      <a
+        routerLink="/preview"
+        fragment="pricing"
+        class="border-b-2 border-transparent pb-1 transition hover:border-green-600 hover:text-green-600"
+        >Pricing</a
+      >
+    </div>
+
+    <div class="hidden items-center justify-end gap-3 md:flex md:flex-1">
+      <a
+        [href]="appUrl + '/login'"
+        class="rounded-xl border-2 border-black px-4 py-2 text-sm font-black transition hover:-translate-y-0.5 hover:shadow-md"
+      >
+        Sign In
+      </a>
+      <a
+        [href]="appUrl + '/login?role=student'"
+        class="rounded-xl border-2 border-black bg-red-600 px-4 py-2 text-sm font-black text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+      >
+        Get Started
+      </a>
+    </div>
+
+    <button
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen()"
+      aria-controls="mobile-menu"
+      aria-label="Toggle menu"
+      class="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-black md:hidden"
+    >
+      @if (isMenuOpen()) {
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      } @else {
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M4 7h16" />
+          <path d="M4 12h16" />
+          <path d="M4 17h16" />
+        </svg>
+      }
+    </button>
+  </nav>
+
+  @if (isMenuOpen()) {
+    <div id="mobile-menu" class="border-t-2 border-black bg-white md:hidden">
+      <div class="flex flex-col gap-1 px-5 py-4 text-sm font-black">
+        <a
+          routerLink="/preview"
+          fragment="features"
+          (click)="closeMenu()"
+          class="rounded-lg px-3 py-3 transition hover:bg-red-50 hover:text-red-600"
+          >Features</a
+        >
+        <a
+          routerLink="/preview"
+          fragment="workflow"
+          (click)="closeMenu()"
+          class="rounded-lg px-3 py-3 transition hover:bg-blue-50 hover:text-blue-600"
+          >How It Works</a
+        >
+        <a
+          routerLink="/preview"
+          fragment="pricing"
+          (click)="closeMenu()"
+          class="rounded-lg px-3 py-3 transition hover:bg-green-50 hover:text-green-600"
+          >Pricing</a
+        >
+        <div class="mt-3 flex flex-col gap-2 border-t-2 border-black/10 pt-4">
+          <a
+            [href]="appUrl + '/login'"
+            (click)="closeMenu()"
+            class="rounded-xl border-2 border-black px-4 py-3 text-center font-black"
+            >Sign In</a
+          >
+          <a
+            [href]="appUrl + '/login?role=student'"
+            (click)="closeMenu()"
+            class="rounded-xl border-2 border-black bg-red-600 px-4 py-3 text-center font-black text-white shadow-md"
+            >Get Started</a
+          >
+        </div>
+      </div>
+    </div>
+  }
+</header>

@@ -1,0 +1,142 @@
+<section class="relative overflow-hidden border-b-4 border-black bg-gray-950 text-white">
+  <div
+    class="absolute inset-0 opacity-[0.06]"
+    style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 26px 26px"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute -right-32 top-1/2 hidden h-140 w-140 -translate-y-1/2 lg:block"
+    aria-hidden="true"
+  >
+    <div class="absolute right-16 top-4 h-64 w-64 rounded-full bg-red-500 opacity-30 blur-3xl"></div>
+    <div class="absolute left-4 top-40 h-56 w-56 rounded-full bg-yellow-400 opacity-25 blur-3xl"></div>
+    <div class="absolute bottom-16 right-0 h-64 w-64 rounded-full bg-blue-500 opacity-30 blur-3xl"></div>
+    <div class="absolute bottom-0 left-16 h-56 w-56 rounded-full bg-green-500 opacity-25 blur-3xl"></div>
+  </div>
+
+  <div
+    class="relative z-10 mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl items-center gap-12 px-5 py-14 sm:px-20 lg:grid-cols-[1fr_460px] lg:py-20"
+  >
+    <div class="max-w-3xl">
+      <p
+        class="mb-6 inline-flex rounded-full border-2 border-black bg-white px-4 py-2 text-sm font-black text-gray-950 shadow-md"
+      >
+        Classroom coding with an UNO twist
+      </p>
+      <h1 class="text-5xl font-black leading-none sm:text-6xl lg:text-7xl">
+        Learn to code.<br />Play to win.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg font-semibold leading-8 sm:text-xl">
+        Runnable lessons, an AI tutor that makes you think, and certificates you can prove.
+        DyasCodeIT turns coding class into a game everyone wants to play.
+      </p>
+      <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+        <a
+          [href]="appUrl + '/login?role=student'"
+          class="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border-2 border-black bg-red-600 px-6 py-3 font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl active:scale-95"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true"
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
+          Start Learning
+        </a>
+        <a
+          [href]="appUrl + '/login?role=teacher'"
+          class="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl border-2 border-black bg-blue-600 px-6 py-3 font-black text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl active:scale-95"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            aria-hidden="true"
+          >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          Teach a Class
+        </a>
+      </div>
+      <p class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-bold text-white/80">
+        <span class="inline-flex items-center gap-2">
+          <svg class="h-4 w-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          Free tier, no card required
+        </span>
+        <span class="inline-flex items-center gap-2">
+          <svg class="h-4 w-4 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          Google, GitHub, or email sign-in
+        </span>
+      </p>
+
+      <div class="mt-10 w-full max-w-sm lg:hidden" aria-hidden="true">
+        <div
+          class="select-none rounded-2xl border-4 border-black bg-gray-950 text-white shadow-2xl"
+        >
+          <div
+            class="flex items-center justify-between rounded-t-2xl border-b-4 border-black bg-blue-600 px-5 py-3 font-black"
+          >
+            <span>Code Runner</span>
+            <span class="rounded-full bg-white px-3 py-1 text-xs text-gray-950">RUN</span>
+          </div>
+          <pre class="overflow-hidden p-5 text-sm leading-7 text-green-200"><code>&gt; python variables.py
+Variables saved
+Score: 100%</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative hidden h-[540px] lg:block" aria-hidden="true">
+      <div
+        class="uno-float select-none absolute right-0 top-0 w-80 rounded-2xl border-4 border-black bg-gray-950 text-white shadow-2xl"
+        style="--card-rot: 5deg"
+      >
+        <div
+          class="flex items-center justify-between rounded-t-2xl border-b-4 border-black bg-blue-600 px-5 py-3 font-black"
+        >
+          <span>Code Runner</span>
+          <span class="rounded-full bg-white px-3 py-1 text-xs text-gray-950">RUN</span>
+        </div>
+        <pre class="overflow-hidden p-5 text-sm leading-7 text-green-200"><code>&gt; python variables.py
+Variables saved
+Score: 100%</code></pre>
+      </div>
+
+      <div
+        class="uno-float select-none absolute left-0 top-[36%] w-64 rounded-2xl border-4 border-black bg-white text-gray-950 shadow-2xl"
+        style="--card-rot: -7deg; animation-delay: 1.5s"
+      >
+        <div class="rounded-t-2xl border-b-4 border-black bg-gray-100 px-5 py-3 font-black">
+          Lesson 1.1
+        </div>
+        <pre class="overflow-hidden p-5 text-sm font-bold leading-7"><code>name = "Dyas"
+for skill in skills:
+    print(skill)</code></pre>
+      </div>
+
+      <div
+        class="uno-float select-none absolute bottom-0 right-[4%] w-72 rounded-2xl border-4 border-black bg-yellow-400 text-gray-950 shadow-2xl"
+        style="--card-rot: -3deg; animation-delay: 3s"
+      >
+        <div class="rounded-t-2xl border-b-4 border-black px-5 py-3 font-black">Dyas Hint</div>
+        <p class="p-5 text-sm font-bold leading-6">
+          What condition would prove your loop stops at the right value?
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

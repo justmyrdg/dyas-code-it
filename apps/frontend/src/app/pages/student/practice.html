@@ -1,0 +1,157 @@
+<h1 class="text-3xl font-black text-gray-900">Practice</h1>
+<p class="mt-1 font-semibold text-gray-600">
+  Build your own projects, take on guided challenges, and collect certificates.
+</p>
+
+@if (error()) {
+  <p class="mt-4 rounded-xl border-2 border-black bg-red-100 px-4 py-3 font-bold text-red-700">{{ error() }}</p>
+}
+
+<div class="mt-6 flex rounded-xl border-2 border-black bg-gray-100 p-1 text-sm font-black">
+  <button type="button" (click)="tab.set('projects')" class="flex-1 rounded-lg py-2 transition"
+    [class.bg-white]="tab() === 'projects'" [class.shadow-sm]="tab() === 'projects'"
+    [class.text-gray-400]="tab() !== 'projects'">
+    My Projects
+  </button>
+  <button type="button" (click)="tab.set('challenges')" class="flex-1 rounded-lg py-2 transition"
+    [class.bg-white]="tab() === 'challenges'" [class.shadow-sm]="tab() === 'challenges'"
+    [class.text-gray-400]="tab() !== 'challenges'">
+    Challenges
+  </button>
+  <button type="button" (click)="tab.set('certificates')" class="flex-1 rounded-lg py-2 transition"
+    [class.bg-white]="tab() === 'certificates'" [class.shadow-sm]="tab() === 'certificates'"
+    [class.text-gray-400]="tab() !== 'certificates'">
+    Certificates
+  </button>
+</div>
+
+@if (loading()) {
+  <p class="mt-10 font-bold text-gray-500">Loading...</p>
+} @else {
+  @switch (tab()) {
+    @case ('projects') {
+      <div class="mt-6">
+        @if (!showCreate()) {
+          <button type="button" class="uno-btn-primary" (click)="showCreate.set(true)">New Project</button>
+        } @else {
+          <form (ngSubmit)="createProject()" class="rounded-2xl border-2 border-black bg-white p-5 shadow-md">
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="np-title" class="text-sm font-bold text-gray-700">Title</label>
+                <input id="np-title" name="title" type="text" required [(ngModel)]="newTitle"
+                  class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold"
+                  placeholder="Snake Game" />
+              </div>
+              <div>
+                <label for="np-lang" class="text-sm font-bold text-gray-700">Language</label>
+                <select id="np-lang" name="language" [(ngModel)]="newLanguage"
+                  class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold">
+                  <option value="python">Python</option>
+                  <option value="javascript">JavaScript</option>
+                  <option value="cpp">C++</option>
+                  <option value="java">Java</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-4">
+              <label for="np-desc" class="text-sm font-bold text-gray-700">Description</label>
+              <textarea id="np-desc" name="description" rows="2" [(ngModel)]="newDescription"
+                class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold"
+                placeholder="What are you building?"></textarea>
+            </div>
+            <div class="mt-4 flex gap-3">
+              <button type="submit" class="uno-btn-primary" [disabled]="creating()">
+                {{ creating() ? 'Creating...' : 'Create Project' }}
+              </button>
+              <button type="button" class="uno-btn-outline" (click)="showCreate.set(false)">Cancel</button>
+            </div>
+          </form>
+        }
+
+        @if (!projects().length) {
+          <p class="mt-6 font-bold text-gray-500">No projects yet — create one or start a challenge.</p>
+        } @else {
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            @for (project of projects(); track project.id) {
+              <div class="rounded-2xl border-2 border-black bg-white p-5 shadow-md">
+                <div class="flex items-start justify-between gap-3">
+                  <a [routerLink]="['/student/practice', project.id]" class="font-black text-gray-900 hover:underline">
+                    {{ project.title }}
+                  </a>
+                  <span class="shrink-0 rounded-full border-2 border-black bg-yellow-400 px-3 py-1 text-xs font-black uppercase text-gray-900">
+                    {{ project.language }}
+                  </span>
+                </div>
+                @if (project.description) {
+                  <p class="mt-2 text-sm font-semibold text-gray-600">{{ project.description }}</p>
+                }
+                <div class="mt-3 flex items-center justify-between">
+                  <span class="text-xs font-black uppercase text-gray-500">{{ project.visibility.replaceAll('_', ' ') }}</span>
+                  <button type="button" (click)="deleteProject(project.id)"
+                    class="text-xs font-black text-red-600 hover:underline">Delete</button>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+    @case ('challenges') {
+      @if (!challenges().length) {
+        <p class="mt-6 font-bold text-gray-500">No challenges published yet — check back soon.</p>
+      } @else {
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          @for (challenge of challenges(); track challenge.id) {
+            <div class="rounded-2xl border-2 border-black bg-white p-5 shadow-md">
+              <div class="flex items-start justify-between gap-3">
+                <p class="font-black text-gray-900">{{ challenge.title }}</p>
+                <span class="shrink-0 rounded-full border-2 border-black px-3 py-1 text-xs font-black uppercase"
+                  [class.bg-green-600]="challenge.difficulty === 'beginner'"
+                  [class.text-white]="challenge.difficulty !== 'intermediate'"
+                  [class.bg-yellow-400]="challenge.difficulty === 'intermediate'"
+                  [class.text-gray-900]="challenge.difficulty === 'intermediate'"
+                  [class.bg-red-600]="challenge.difficulty === 'advanced'">
+                  {{ challenge.difficulty }}
+                </span>
+              </div>
+              <p class="mt-2 text-sm font-semibold text-gray-600">{{ challenge.description }}</p>
+              <div class="mt-3 flex items-center justify-between">
+                <span class="text-xs font-black uppercase text-gray-500">{{ challenge.language }}</span>
+                @if (progressFor(challenge.id); as prog) {
+                  @if (prog.completed) {
+                    <span class="rounded-full border-2 border-black bg-green-600 px-3 py-1 text-xs font-black uppercase text-white">Completed</span>
+                  } @else {
+                    <a [routerLink]="['/student/practice', prog.projectId]" class="text-sm font-black text-blue-700 hover:underline">Continue</a>
+                  }
+                } @else {
+                  <button type="button" class="text-sm font-black text-blue-700 hover:underline"
+                    (click)="startChallenge(challenge.id)">Start</button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+    @case ('certificates') {
+      @if (!certificates().length) {
+        <p class="mt-6 font-bold text-gray-500">
+          No certificates yet. Complete every lesson and pass every assessment in a class, then claim it from the class page.
+        </p>
+      } @else {
+        <div class="mt-6 grid gap-4 md:grid-cols-2">
+          @for (cert of certificates(); track cert.id) {
+            <a [routerLink]="['/student/certificates', cert.id]"
+              class="rounded-2xl border-2 border-black bg-white p-5 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg">
+              <p class="font-black text-gray-900">{{ cert.topic?.name }}</p>
+              <p class="mt-1 text-sm font-semibold text-gray-600">{{ cert.class?.name }}</p>
+              <p class="mt-2 text-xs font-black uppercase text-gray-500">
+                Issued {{ cert.issuedAt.slice(0, 10) }}
+              </p>
+            </a>
+          }
+        </div>
+      }
+    }
+  }
+}

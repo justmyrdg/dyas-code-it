@@ -1,0 +1,75 @@
+<div class="flex items-center justify-between">
+  <h1 class="text-3xl font-black text-gray-900">Curriculum Topics</h1>
+  <button type="button" class="uno-btn-primary" (click)="showCreateForm.set(!showCreateForm())">
+    {{ showCreateForm() ? 'Cancel' : 'New Topic' }}
+  </button>
+</div>
+
+@if (error()) {
+  <p class="mt-4 rounded-xl border-2 border-black bg-red-100 px-4 py-3 font-bold text-red-700">
+    {{ error() }}
+  </p>
+}
+
+@if (showCreateForm()) {
+  <form
+    class="mt-6 rounded-2xl border-2 border-black bg-white p-6 shadow-lg"
+    (ngSubmit)="createTopic()"
+  >
+    <label class="block text-sm font-black uppercase text-gray-700" for="topic-name">Topic name</label>
+    <input
+      id="topic-name"
+      name="name"
+      [(ngModel)]="newName"
+      required
+      placeholder="e.g. Python Basics"
+      class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold"
+    />
+    <label class="mt-4 block text-sm font-black uppercase text-gray-700" for="topic-description"
+      >Description</label
+    >
+    <textarea
+      id="topic-description"
+      name="description"
+      [(ngModel)]="newDescription"
+      rows="3"
+      placeholder="What will students learn?"
+      class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-semibold"
+    ></textarea>
+    <button type="submit" class="uno-btn-success mt-4" [disabled]="creating()">
+      {{ creating() ? 'Creating...' : 'Create Topic' }}
+    </button>
+  </form>
+}
+
+@if (loading()) {
+  <p class="mt-10 font-bold text-gray-500">Loading topics...</p>
+} @else if (topics().length === 0) {
+  <p class="mt-10 font-bold text-gray-500">No topics yet. Create your first one.</p>
+} @else {
+  <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    @for (topic of topics(); track topic.id) {
+      <div [class]="'uno-card uno-animate-in ' + statusCardClass(topic.status)">
+        <div class="uno-card-header">
+          <span class="truncate">{{ topic.name }}</span>
+          <span class="uno-card-badge uppercase">{{ topic.status }}</span>
+        </div>
+        <div class="uno-card-body">
+          <p class="font-semibold">{{ topic.description || 'No description yet.' }}</p>
+        </div>
+        <div class="uno-card-footer flex gap-3">
+          <a [routerLink]="['/admin/topics', topic.id]" class="uno-btn-outline !px-4 !py-2 text-sm">
+            Edit
+          </a>
+          <button
+            type="button"
+            class="uno-btn-outline !px-4 !py-2 text-sm"
+            (click)="deleteTopic(topic)"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+}

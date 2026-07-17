@@ -1,0 +1,77 @@
+<div class="rounded-2xl border-2 border-black bg-white p-5 shadow-md">
+  <div class="flex items-start justify-between gap-3">
+    <p class="whitespace-pre-line font-bold text-gray-900">{{ activity().prompt }}</p>
+    <span class="shrink-0 rounded-full border-2 border-black bg-yellow-400 px-3 py-1 text-xs font-black uppercase text-gray-900">
+      {{ activity().type }}
+    </span>
+  </div>
+
+  @if (bestPrior(); as prior) {
+    <p class="mt-2 text-xs font-bold text-gray-500">Best so far: {{ prior.score }}% ({{ prior.passed ? 'passed' : 'not passed' }})</p>
+  }
+
+  <!-- Quiz -->
+  @if (activity().type === 'quiz') {
+    <div class="mt-4 space-y-2">
+      @for (option of activity().config.options ?? []; track $index) {
+        <label class="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-black px-4 py-2 font-semibold hover:bg-gray-50">
+          <input type="radio" name="quiz-{{ activity().id }}" [value]="$index"
+            [checked]="selectedIndex() === $index" (change)="selectedIndex.set($index)" />
+          {{ option }}
+        </label>
+      }
+    </div>
+  }
+
+  <!-- Fill in the blank -->
+  @if (activity().type === 'fill_blank') {
+    <div class="mt-4 space-y-2">
+      @for (value of blankValues(); track $index) {
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-black text-gray-500">Blank {{ $index + 1 }}</span>
+          <input type="text" class="flex-1 rounded-xl border-2 border-black px-3 py-2 font-mono"
+            [ngModel]="value" (ngModelChange)="setBlank($index, $event)" />
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Code challenge / debug -->
+  @if (isCode()) {
+    @if ((activity().config.sampleInputs ?? []).length) {
+      <p class="mt-3 text-xs font-bold text-gray-500">
+        Your code is run against hidden test cases with sample inputs.
+      </p>
+    }
+    <div class="mt-3 overflow-hidden rounded-xl border-2 border-black bg-gray-900 shadow-md">
+      <div class="border-b-2 border-black bg-gray-800 px-4 py-2 text-xs font-black uppercase tracking-wide text-yellow-400">
+        {{ activity().config.language }}
+      </div>
+      <textarea class="block w-full resize-y bg-gray-900 px-4 py-3 font-mono text-sm leading-relaxed text-gray-100 outline-none"
+        rows="8" spellcheck="false" [ngModel]="source()" (ngModelChange)="source.set($event)"></textarea>
+    </div>
+  }
+
+  @if (error()) {
+    <p class="mt-3 rounded-lg border-2 border-black bg-red-100 px-3 py-2 text-sm font-bold text-red-700">{{ error() }}</p>
+  }
+
+  @if (result(); as r) {
+    <div class="mt-3 rounded-xl border-2 border-black p-4 font-bold"
+      [class.bg-green-100]="r.passed" [class.text-green-800]="r.passed"
+      [class.bg-red-100]="!r.passed" [class.text-red-800]="!r.passed">
+      {{ r.feedback }} ({{ r.score }}%)
+      @if (r.details?.length) {
+        <ul class="mt-2 space-y-1 text-sm font-semibold">
+          @for (d of r.details; track $index) {
+            <li>Test {{ $index + 1 }}: {{ d.passed ? 'passed' : 'failed' }}</li>
+          }
+        </ul>
+      }
+    </div>
+  }
+
+  <button type="button" class="uno-btn-primary mt-4" [disabled]="submitting()" (click)="submit()">
+    {{ submitting() ? 'Submitting...' : result() ? 'Try Again' : 'Submit' }}
+  </button>
+</div>

@@ -1,0 +1,25 @@
+{
+  "name": "dyascodeit",
+  "version": "1.0.0",
+  "description": "DyasCodeIT - Gamified Coding Learning Platform",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w apps/backend\" \"npm run dev -w apps/landing\" \"npm run dev -w apps/frontend\"",
+    "dev:backend": "npm run dev -w apps/backend",
+    "dev:landing": "npm run dev -w apps/landing",
+    "dev:frontend": "npm run dev -w apps/frontend",
+    "build": "npm run build -w apps/backend && npm run build -w apps/landing && npm run build -w apps/frontend",
+    "start": "npm start -w apps/backend",
+    "typecheck": "tsc --noEmit -p apps/backend && tsc --noEmit -p apps/frontend/tsconfig.app.json && tsc --noEmit -p apps/landing/tsconfig.app.json",
+    "test": "npm test -w apps/backend"
+  },
+  "workspaces": [
+    "apps/backend",
+    "apps/landing",
+    "apps/frontend",
+    "shared"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

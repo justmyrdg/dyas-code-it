@@ -1,0 +1,50 @@
+<section id="testimonials" class="bg-white px-5 py-16 sm:px-20 lg:py-24">
+  <div class="mx-auto max-w-4xl text-center">
+    <p class="text-sm font-black uppercase text-blue-600">Word on the Street</p>
+    <h2 class="mt-2 text-4xl font-black leading-tight sm:text-5xl">
+      Loved by students and teachers.
+    </h2>
+
+    @for (t of testimonials; track t.name) {
+      @if (activeIndex() === $index) {
+        <figure class="mt-10">
+          <svg
+            [class]="'mx-auto h-10 w-10 ' + t.accent"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"
+            />
+            <path
+              d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"
+            />
+          </svg>
+          <blockquote class="mt-6 text-2xl font-black leading-tight text-gray-950 sm:text-3xl">
+            "{{ t.quote }}"
+          </blockquote>
+          <figcaption class="mt-6 text-sm font-bold uppercase tracking-wide text-gray-500">
+            <span class="font-black text-gray-950">{{ t.name }}</span> · {{ t.role }}
+          </figcaption>
+        </figure>
+      }
+    }
+
+    <div class="mt-10 flex justify-center gap-3">
+      @for (t of testimonials; track t.name; let i = $index) {
+        <button
+          type="button"
+          (click)="select(i)"
+          [attr.aria-label]="'Show testimonial from ' + t.name"
+          [attr.aria-pressed]="activeIndex() === i"
+          class="h-2.5 rounded-full transition-all"
+          [class.w-8]="activeIndex() === i"
+          [class.bg-blue-600]="activeIndex() === i"
+          [class.w-2.5]="activeIndex() !== i"
+          [class.bg-gray-200]="activeIndex() !== i"
+        ></button>
+      }
+    </div>
+  </div>
+</section>

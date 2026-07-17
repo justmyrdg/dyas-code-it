@@ -1,0 +1,62 @@
+<h1 class="text-3xl font-black text-gray-900">My Classes</h1>
+
+<form
+  class="mt-6 flex flex-wrap items-end gap-3 rounded-2xl border-2 border-black bg-white p-5 shadow-md"
+  (ngSubmit)="join()"
+>
+  <div class="grow">
+    <label class="block text-sm font-black uppercase text-gray-700" for="join-code">
+      Have a class code?
+    </label>
+    <input
+      id="join-code"
+      name="joinCode"
+      [(ngModel)]="joinCode"
+      required
+      maxlength="6"
+      placeholder="e.g. PY2K24"
+      class="mt-1 w-full rounded-xl border-2 border-black px-4 py-2 font-mono text-lg font-black uppercase tracking-widest"
+    />
+  </div>
+  <button type="submit" class="uno-btn-primary" [disabled]="joining()">
+    {{ joining() ? 'Joining...' : 'Join Class' }}
+  </button>
+</form>
+
+@if (error()) {
+  <p class="mt-4 rounded-xl border-2 border-black bg-red-100 px-4 py-3 font-bold text-red-700">
+    {{ error() }}
+  </p>
+}
+
+@if (loading()) {
+  <p class="mt-10 font-bold text-gray-500">Loading your classes...</p>
+} @else if (classes().length === 0) {
+  <p class="mt-10 font-bold text-gray-500">
+    You're not enrolled in any classes yet. Enter the class code your teacher shared to get started.
+  </p>
+} @else {
+  <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+    @for (klass of classes(); track klass.id) {
+      <a
+        [routerLink]="['/student/classes', klass.id]"
+        class="uno-card uno-card-green uno-animate-in block"
+      >
+        <div class="uno-card-header">
+          <span class="truncate">{{ klass.name }}</span>
+          <span class="uno-card-badge">{{ progressPercent(klass) }}%</span>
+        </div>
+        <div class="uno-card-body">
+          <p class="text-sm font-semibold text-green-100">{{ klass.topic.name }}</p>
+          <p class="mt-1 text-sm font-semibold text-green-100">Teacher: {{ klass.teacher.name }}</p>
+          <div class="mt-4 h-3 w-full overflow-hidden rounded-full border-2 border-black bg-white">
+            <div class="h-full bg-yellow-400" [style.width.%]="progressPercent(klass)"></div>
+          </div>
+          <p class="mt-2 text-sm font-bold text-green-100">
+            {{ klass.completedLessons }}/{{ klass.totalLessons }} lessons completed
+          </p>
+        </div>
+      </a>
+    }
+  </div>
+}

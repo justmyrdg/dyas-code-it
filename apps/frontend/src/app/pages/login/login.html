@@ -1,0 +1,489 @@
+<main class="bg-white text-gray-950">
+  <div class="grid min-h-screen lg:grid-cols-2">
+    <section
+      class="relative hidden flex-col justify-center overflow-hidden border-r-4 border-black bg-gray-950 px-5 py-16 text-white sm:px-20 lg:flex"
+    >
+      <div
+        class="absolute inset-0 opacity-[0.06]"
+        style="
+          background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+          background-size: 26px 26px;
+        "
+        aria-hidden="true"
+      ></div>
+      <div
+        class="pointer-events-none absolute -left-24 top-1/2 h-140 w-140 -translate-y-1/2"
+        aria-hidden="true"
+      >
+        <div
+          class="absolute right-16 top-4 h-64 w-64 rounded-full bg-red-500 opacity-25 blur-3xl"
+        ></div>
+        <div
+          class="absolute left-4 top-40 h-56 w-56 rounded-full bg-yellow-400 opacity-20 blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-16 right-0 h-64 w-64 rounded-full bg-blue-500 opacity-25 blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-0 left-16 h-56 w-56 rounded-full bg-green-500 opacity-20 blur-3xl"
+        ></div>
+      </div>
+
+      <div class="relative z-10 max-w-xl">
+        <p class="uno-text-outline inline-block text-2xl font-black">
+          <span class="text-red-500">Dyas</span><span class="text-blue-400">Code</span
+          ><span class="text-green-400">IT</span>
+        </p>
+        <br />
+
+        <div
+          class="mt-6 inline-flex rounded-full border-2 border-black bg-white p-1 shadow-md"
+          role="tablist"
+          aria-label="I am a"
+        >
+          <a
+            routerLink="/login"
+            [queryParams]="{ role: 'student' }"
+            role="tab"
+            [attr.aria-selected]="activeRole() === 'student'"
+            class="rounded-full px-6 py-2 text-sm font-black text-gray-950 transition"
+            [class.bg-red-600]="activeRole() === 'student'"
+            [class.text-white]="activeRole() === 'student'"
+            >Student</a
+          >
+          <a
+            routerLink="/login"
+            [queryParams]="{ role: 'teacher' }"
+            role="tab"
+            [attr.aria-selected]="activeRole() === 'teacher'"
+            class="rounded-full px-6 py-2 text-sm font-black text-gray-950 transition"
+            [class.bg-blue-600]="activeRole() === 'teacher'"
+            [class.text-white]="activeRole() === 'teacher'"
+            >Teacher</a
+          >
+        </div>
+
+        <h1 class="mt-6 text-3xl font-black leading-tight xl:text-4xl 2xl:text-5xl">
+          {{ headingLine1() }}<br />{{ headingLine2() }}
+        </h1>
+        <p class="mt-4 text-lg font-semibold leading-8 text-gray-300">
+          {{ description() }}
+        </p>
+
+        <ul class="mt-8 space-y-3">
+          @for (benefit of benefits(); track benefit) {
+            <li class="flex items-start gap-3 font-semibold text-gray-200">
+              <svg
+                class="mt-0.5 h-5 w-5 shrink-0 text-green-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                aria-hidden="true"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              {{ benefit }}
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="flex items-center justify-center px-5 py-12 sm:px-20 lg:py-16">
+      <div class="w-full max-w-lg">
+        <div class="mb-8 lg:hidden">
+          <h1 class="mt-6 text-4xl font-black leading-tight">
+            {{ headingLine1() }}<br />{{ headingLine2() }}
+          </h1>
+          <p class="mt-3 font-semibold leading-7 text-gray-700">
+            {{ description() }}
+          </p>
+          <div
+            class="mt-6 inline-flex rounded-full border-2 border-black bg-white p-1 shadow-md"
+            role="tablist"
+            aria-label="I am a"
+          >
+            <a
+              routerLink="/login"
+              [queryParams]="{ role: 'student' }"
+              role="tab"
+              [attr.aria-selected]="activeRole() === 'student'"
+              class="rounded-full px-6 py-2 text-sm font-black transition"
+              [class.bg-red-600]="activeRole() === 'student'"
+              [class.text-white]="activeRole() === 'student'"
+              >Student</a
+            >
+            <a
+              routerLink="/login"
+              [queryParams]="{ role: 'teacher' }"
+              role="tab"
+              [attr.aria-selected]="activeRole() === 'teacher'"
+              class="rounded-full px-6 py-2 text-sm font-black transition"
+              [class.bg-blue-600]="activeRole() === 'teacher'"
+              [class.text-white]="activeRole() === 'teacher'"
+              >Teacher</a
+            >
+          </div>
+        </div>
+
+        <div class="flex rounded-xl border-2 border-black bg-gray-100 p-1 text-sm font-black">
+          <button
+            type="button"
+            (click)="setMode('signin')"
+            class="flex-1 rounded-lg py-2 transition"
+            [class.bg-white]="mode() === 'signin'"
+            [class.shadow-sm]="mode() === 'signin'"
+            [class.text-gray-400]="mode() !== 'signin'"
+          >
+            Sign in
+          </button>
+          <button
+            type="button"
+            (click)="setMode('register')"
+            class="flex-1 rounded-lg py-2 transition"
+            [class.bg-white]="mode() === 'register'"
+            [class.shadow-sm]="mode() === 'register'"
+            [class.text-gray-400]="mode() !== 'register'"
+          >
+            Create account
+          </button>
+        </div>
+
+        <div class="mt-6 space-y-4">
+          @if (errorMessage(); as message) {
+            <div class="rounded-xl border-2 border-black bg-red-50 px-5 py-3 text-sm font-bold text-red-700">
+              {{ message }}
+            </div>
+          }
+          @if (successMessage(); as message) {
+            <div class="rounded-xl border-2 border-black bg-green-50 px-5 py-3 text-sm font-bold text-green-800">
+              {{ message }}
+            </div>
+          }
+          @if (!showEmailForm()) {
+            <a
+              [href]="apiUrl + '/auth/google?role=' + activeRole()"
+              class="flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border-2 border-black bg-white px-5 py-3 font-black text-gray-950 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.84z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06L5.84 9.9C6.71 7.31 9.14 5.38 12 5.38z"
+                />
+              </svg>
+              Continue with Google
+            </a>
+
+            <a
+              [href]="apiUrl + '/auth/github?role=' + activeRole()"
+              class="flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border-2 border-black bg-gray-950 px-5 py-3 font-black text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M12 .5A11.5 11.5 0 0 0 8.36 22.9c.58.11.79-.25.79-.56v-2.02c-3.22.7-3.9-1.38-3.9-1.38-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.78 2.73 1.27 3.4.97.1-.75.41-1.27.74-1.56-2.57-.29-5.27-1.29-5.27-5.73 0-1.27.45-2.3 1.2-3.11-.12-.29-.52-1.47.11-3.07 0 0 .98-.31 3.2 1.19a11.1 11.1 0 0 1 5.82 0c2.22-1.5 3.19-1.19 3.19-1.19.64 1.6.24 2.78.12 3.07.75.81 1.2 1.84 1.2 3.11 0 4.46-2.71 5.43-5.29 5.72.42.36.79 1.08.79 2.18v3.22c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .5Z"
+                />
+              </svg>
+              Continue with GitHub
+            </a>
+
+            <div class="flex items-center gap-3 py-1" aria-hidden="true">
+              <div class="h-px flex-1 bg-gray-200"></div>
+              <span class="text-xs font-black uppercase text-gray-400">or continue with email</span>
+              <div class="h-px flex-1 bg-gray-200"></div>
+            </div>
+
+            <button
+              type="button"
+              (click)="showEmailForm.set(true)"
+              class="flex min-h-14 w-full items-center justify-center gap-3 rounded-xl border-2 border-black bg-white px-5 py-3 font-black text-gray-950 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                aria-hidden="true"
+              >
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+                <path d="m2 7 10 6 10-6" />
+              </svg>
+              Login with email
+            </button>
+          } @else {
+            <button
+              type="button"
+              (click)="showEmailForm.set(false)"
+              class="flex items-center gap-2 text-sm font-black text-gray-500 transition hover:text-gray-950"
+            >
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                aria-hidden="true"
+              >
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+              Back
+            </button>
+            @if (mode() === 'signin') {
+              <form (ngSubmit)="onSignInSubmit()" class="space-y-4" autocomplete="on">
+                <div>
+                  <label for="signin-email" class="text-sm font-bold text-gray-700">Email</label>
+                  <input
+                    id="signin-email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    [(ngModel)]="signInEmail"
+                    class="mt-1 w-full rounded-xl border-2 border-black px-5 py-3 font-semibold shadow-sm transition focus:outline-none focus:ring-4 focus:ring-blue-600/25"
+                    placeholder="you@example.com"
+                  />
+                </div>
+                <div>
+                  <div class="flex items-baseline justify-between">
+                    <label for="signin-password" class="text-sm font-bold text-gray-700"
+                      >Password</label
+                    >
+                    <a routerLink="/forgot-password" class="text-xs font-bold text-blue-600 hover:underline"
+                      >Forgot password?</a
+                    >
+                  </div>
+                  <div class="relative mt-1">
+                    <input
+                      id="signin-password"
+                      name="password"
+                      [type]="showSignInPassword() ? 'text' : 'password'"
+                      required
+                      minlength="8"
+                      autocomplete="current-password"
+                      [(ngModel)]="signInPassword"
+                      class="w-full rounded-xl border-2 border-black px-5 py-3 pr-12 font-semibold shadow-sm transition focus:outline-none focus:ring-4 focus:ring-blue-600/25"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      (click)="showSignInPassword.set(!showSignInPassword())"
+                      [attr.aria-label]="showSignInPassword() ? 'Hide password' : 'Show password'"
+                      class="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-gray-500 hover:text-gray-950"
+                    >
+                      @if (showSignInPassword()) {
+                        <svg
+                          class="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                          <circle cx="12" cy="12" r="3" />
+                        </svg>
+                      } @else {
+                        <svg
+                          class="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M9.9 4.24A10.4 10.4 0 0 1 12 4c6.5 0 10 7 10 7a17.5 17.5 0 0 1-2.16 3.19m-3.05 2.7A10.4 10.4 0 0 1 12 18c-6.5 0-10-7-10-7a17.6 17.6 0 0 1 4.22-5.06"
+                          />
+                          <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                          <path d="M2 2l20 20" />
+                        </svg>
+                      }
+                    </button>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  [disabled]="submitting()"
+                  class="w-full rounded-xl border-2 border-black bg-blue-600 px-5 py-3 font-black text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:opacity-50"
+                >
+                  {{ submitting() ? 'Signing in...' : 'Sign in' }}
+                </button>
+              </form>
+            } @else {
+              <form (ngSubmit)="onRegisterSubmit()" class="space-y-4" autocomplete="on">
+                <div>
+                  <label for="register-name" class="text-sm font-bold text-gray-700"
+                    >Full name</label
+                  >
+                  <input
+                    id="register-name"
+                    name="name"
+                    type="text"
+                    required
+                    autocomplete="name"
+                    [(ngModel)]="registerName"
+                    class="mt-1 w-full rounded-xl border-2 border-black px-5 py-3 font-semibold shadow-sm transition focus:outline-none focus:ring-4 focus:ring-blue-600/25"
+                    placeholder="Ada Lovelace"
+                  />
+                </div>
+                <div>
+                  <label for="register-email" class="text-sm font-bold text-gray-700">Email</label>
+                  <input
+                    id="register-email"
+                    name="email"
+                    type="email"
+                    required
+                    autocomplete="email"
+                    [(ngModel)]="registerEmail"
+                    class="mt-1 w-full rounded-xl border-2 border-black px-5 py-3 font-semibold shadow-sm transition focus:outline-none focus:ring-4 focus:ring-blue-600/25"
+                    placeholder="you@example.com"
+                  />
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label for="register-password" class="text-sm font-bold text-gray-700"
+                      >Password</label
+                    >
+                    <div class="relative mt-1">
+                      <input
+                        id="register-password"
+                        name="password"
+                        [type]="showRegisterPassword() ? 'text' : 'password'"
+                        required
+                        minlength="8"
+                        autocomplete="new-password"
+                        [(ngModel)]="registerPassword"
+                        class="w-full rounded-xl border-2 border-black px-5 py-3 pr-12 font-semibold shadow-sm transition focus:outline-none focus:ring-4 focus:ring-blue-600/25"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        (click)="showRegisterPassword.set(!showRegisterPassword())"
+                        [attr.aria-label]="
+                          showRegisterPassword() ? 'Hide password' : 'Show password'
+                        "
+                        class="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-gray-500 hover:text-gray-950"
+                      >
+                        @if (showRegisterPassword()) {
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        } @else {
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M9.9 4.24A10.4 10.4 0 0 1 12 4c6.5 0 10 7 10 7a17.5 17.5 0 0 1-2.16 3.19m-3.05 2.7A10.4 10.4 0 0 1 12 18c-6.5 0-10-7-10-7a17.6 17.6 0 0 1 4.22-5.06"
+                            />
+                            <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                            <path d="M2 2l20 20" />
+                          </svg>
+                        }
+                      </button>
+                    </div>
+                    <p class="mt-1 text-xs font-semibold text-gray-500">At least 8 characters.</p>
+                  </div>
+                  <div>
+                    <label for="register-confirm" class="text-sm font-bold text-gray-700"
+                      >Confirm password</label
+                    >
+                    <div class="relative mt-1">
+                      <input
+                        id="register-confirm"
+                        name="confirmPassword"
+                        [type]="showRegisterConfirm() ? 'text' : 'password'"
+                        required
+                        minlength="8"
+                        autocomplete="new-password"
+                        [(ngModel)]="registerConfirmPassword"
+                        class="w-full rounded-xl border-2 border-black px-5 py-3 pr-12 font-semibold shadow-sm transition focus:outline-none focus:ring-4 focus:ring-blue-600/25"
+                        placeholder="••••••••"
+                      />
+                      <button
+                        type="button"
+                        (click)="showRegisterConfirm.set(!showRegisterConfirm())"
+                        [attr.aria-label]="
+                          showRegisterConfirm() ? 'Hide password' : 'Show password'
+                        "
+                        class="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-gray-500 hover:text-gray-950"
+                      >
+                        @if (showRegisterConfirm()) {
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        } @else {
+                          <svg
+                            class="h-5 w-5"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M9.9 4.24A10.4 10.4 0 0 1 12 4c6.5 0 10 7 10 7a17.5 17.5 0 0 1-2.16 3.19m-3.05 2.7A10.4 10.4 0 0 1 12 18c-6.5 0-10-7-10-7a17.6 17.6 0 0 1 4.22-5.06"
+                            />
+                            <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                            <path d="M2 2l20 20" />
+                          </svg>
+                        }
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                @if (passwordMismatch()) {
+                  <p class="text-sm font-bold text-red-600">Passwords don't match.</p>
+                }
+                <button
+                  type="submit"
+                  [disabled]="submitting()"
+                  class="w-full rounded-xl border-2 border-black bg-red-600 px-5 py-3 font-black text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg active:scale-95 disabled:opacity-50"
+                >
+                  {{ submitting() ? 'Creating account...' : 'Create account' }}
+                </button>
+              </form>
+            }
+          }
+
+          <p class="pt-2 text-center text-sm font-semibold text-gray-500">
+            {{ helper() }}
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

@@ -1,0 +1,10 @@
+{
+  "name": "@dyascodeit/shared",
+  "version": "1.0.0",
+  "description": "Shared types and models",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  }
+}
